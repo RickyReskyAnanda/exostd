@@ -3,35 +3,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller{
 
-	public function __construct(){
-            parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
     }
-
-
-    /*
-    |----------------------------------------------------
-    |		cek session
-    |----------------------------------------------------
-    |	1. fungsi cek_session untuk mengecek user masih login atau tidak
-    |	2. jika session bernilai false maka akan kembali ke halaman login
-    |	3. 
-    
-    */
-    public function cek_session(){
-    	$login = $this->session->userdata('login');
-    	if($login != "masukxyz"){
-    		redirect('login');
-    	}
+    public function admin_view($page_isi,$data){
+        $this->load->view('H_beranda/V_header',$data);
+        $this->load->view($page_isi,$data);
+        $this->load->view('H_beranda/V_footer');
     }
-
-    /*
-    |----------------------------------------------------
-    |                  View 1 - Simple load view
-    |----------------------------------------------------
-    */
-    public function simple_load_view($page){
-        $this->load->view('A_dashboard/V_header');
-        $this->load->view($page);
-        $this->load->view('A_dashboard/V_footer');
+    //redirect login
+    public function cek_session($modelnya){
+        $logged_in = $this->session->userdata('logged_in');
+        if($logged_in == "administratornya") {
+            $this->load->model($modelnya);
+        }else{
+            $this->session->set_flashdata('pesan', 'Silahkan Login Kembali !');
+            redirect('','refresh');
+        } 
     }
 }
+
+
+?>
